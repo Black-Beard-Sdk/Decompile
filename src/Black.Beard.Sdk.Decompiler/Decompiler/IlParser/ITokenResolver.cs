@@ -34,7 +34,7 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// </summary>
         /// <param name="token">The token.</param>
         /// <returns></returns>
-        byte[] AsSignature(int token);
+        byte[] AsSign(int token);
 
         /// <summary>
         /// Ases the string.

@@ -6,7 +6,7 @@ namespace Bb.Sdk.Decompiler.IlParser
     /// <summary>
     /// ReadableILStringVisitor
     /// </summary>
-    public class ReadableILStringVisitor : ILInstructionVisitor
+    public class ReadableILStringVisitor : AbstractILInstructionVisitor
     {
 
         /// <summary>
@@ -27,6 +27,61 @@ namespace Bb.Sdk.Decompiler.IlParser
         {
             this.formatProvider = formatProvider;
             this.collector = collector;
+        }
+
+        public override void VisitInlineConditionInstruction(InlineConditionInstruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineConvertionInstruction(InlineConvertionInstruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineLdArgInstruction(InlineLdArgInstruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineLdElemInstruction(InlineLdElemInstruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineLdI4Instruction(InlineLdI4Instruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineLdLocInstruction(InlineLdLocInstruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineLdLocSInstruction(InlineLdLocSInstruction inline)
+        {
+            this.collector.Process(inline, this.formatProvider.Argument(inline.Ordinal));
+        }
+
+        public override void VisitInlineOperatorInstruction(InlineOperatorInstruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineStElemInstruction(InlineStElemInstruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineStLocInstruction(InlineStLocInstruction inline)
+        {
+            this.collector.Process(inline, string.Empty);
+        }
+
+        public override void VisitInlineStLocSInstruction(InlineStLocSInstruction inline)
+        {
+            this.collector.Process(inline, this.formatProvider.Argument(inline.Ordinal));
         }
 
         /// <summary>
@@ -117,7 +172,7 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// <param name="inlineSigInstruction">The inline sig instruction.</param>
         public override void VisitInlineSigInstruction(InlineSigInstruction inlineSigInstruction)
         {
-            this.collector.Process(inlineSigInstruction, this.formatProvider.SigByteArrayToString(inlineSigInstruction.Signature));
+            this.collector.Process(inlineSigInstruction, this.formatProvider.SigByteArrayToString(inlineSigInstruction.Sign));
         }
 
         /// <summary>

@@ -57,7 +57,7 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// </summary>
         /// <param name="token">The token.</param>
         /// <returns></returns>
-        public byte[] AsSignature(int token)
+        public byte[] AsSign(int token)
         {
             return this.m_module.ResolveSignature(token);
         }

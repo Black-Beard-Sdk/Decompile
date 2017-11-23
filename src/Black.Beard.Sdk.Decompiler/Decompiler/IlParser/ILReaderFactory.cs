@@ -28,7 +28,7 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// <param name="offset">The offset.</param>
         /// <returns></returns>
         /// <exception cref="System.NotSupportedException"></exception>
-        public static ILReader Create(object obj, int offset)
+        public static ILInstructionReader Create(object obj, int offset)
         {
 
             Type type = obj.GetType();
@@ -39,14 +39,18 @@ namespace Bb.Sdk.Decompiler.IlParser
                     method = (DynamicMethod)s_fiOwner.GetValue(obj);
                 else
                     method = obj as DynamicMethod;
-                return new ILReader(new DynamicMethodILProvider(method), new DynamicScopeTokenResolver(method));
+                return new ILInstructionReader(new DynamicMethodILProvider(method), new DynamicScopeTokenResolver(method));
             }
 
             if ((type != s_runtimeMethodInfoType) && (type != s_runtimeConstructorInfoType))
                 throw new NotSupportedException(string.Format("Reading IL from type {0} is currently not supported", type));
-            
-            return new ILReader(obj as MethodBase);
-        
+
+            var ilReader = new ILInstructionReader(obj as MethodBase);
+
+            ilReader.ReadIl();
+
+            return ilReader;
+
         }
 
 

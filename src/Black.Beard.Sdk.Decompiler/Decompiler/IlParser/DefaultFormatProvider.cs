@@ -7,7 +7,7 @@ namespace Bb.Sdk.Decompiler.IlParser
     /// <summary>
     /// DefaultFormatProvider
     /// </summary>
-    public class DefaultFormatProvider : Bb.Sdk.Decompiler.IlParser.IFormatProvider
+    public class DefaultFormatProvider : IFormatProvider
     {
         /// <summary>
         /// The instance

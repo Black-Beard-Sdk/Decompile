@@ -92,7 +92,7 @@ namespace Bb.Sdk.Decompiler.IlParser
             return null;
         }
 
-        public byte[] AsSignature(int token)
+        public byte[] AsSign(int token)
         {
             return (this[token] as byte[]);
         }

@@ -1,11 +1,12 @@
 using System.Reflection.Emit;
 
 namespace Bb.Sdk.Decompiler.IlParser
-{    
+{
 
     /// <summary>
     /// InlineSwitchInstruction
     /// </summary>
+    //[System.Diagnostics.DebuggerDisplay("{}")]
     public class InlineSwitchInstruction : ILInstruction
     {
 
@@ -17,14 +18,14 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// <param name="deltas">The deltas.</param>
         internal InlineSwitchInstruction(int offset, OpCode opCode, int[] deltas) : base(offset, opCode)
         {
-            this.m_deltas = deltas;
+            this._deltas = deltas;
         }
 
         /// <summary>
         /// Accepts the specified visitor.
         /// </summary>
         /// <param name="visitor">The visitor.</param>
-        public override void Accept(ILInstructionVisitor visitor)
+        public override void Accept(AbstractILInstructionVisitor visitor)
         {
             visitor.VisitInlineSwitchInstruction(this);
         }
@@ -35,7 +36,7 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// <value>
         /// The deltas.
         /// </value>
-        public int[] Deltas        {            get            {                return (int[]) this.m_deltas.Clone();            }        }
+        public int[] Deltas { get { return (int[])this._deltas.Clone(); } }
 
         /// <summary>
         /// Gets the target offsets.
@@ -47,20 +48,61 @@ namespace Bb.Sdk.Decompiler.IlParser
         {
             get
             {
-                if (this.m_targetOffsets == null)
+                if (this._targetOffsets == null)
                 {
-                    int length = this.m_deltas.Length;
+                    int length = this._deltas.Length;
                     int num2 = 5 + (4 * length);
-                    this.m_targetOffsets = new int[length];
+                    this._targetOffsets = new int[length];
                     for (int i = 0; i < length; i++)
-                        this.m_targetOffsets[i] = (base.m_offset + this.m_deltas[i]) + num2;
+                        this._targetOffsets[i] = (base._offset + this._deltas[i]) + num2;
                 }
-                return this.m_targetOffsets;
+                return this._targetOffsets;
             }
         }
 
-        private int[] m_deltas;
-        private int[] m_targetOffsets;
+        public override int GetSize()
+        {
+
+            int size = 0;
+            var index = ((ushort)this.OpCode.Value);
+            if (index < 0x100)
+                size = 1;
+            else
+                size = 2;
+
+            return size + (1 + ((int[])Deltas).Length) * 4;
+
+        }
+
+        ///// <summary>
+        ///// Returns a hash code for this instance.
+        ///// </summary>
+        ///// <returns>
+        ///// A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table. 
+        ///// </returns>
+        //public override int GetHashCode()
+        //{
+        //    return this.OpCode.GetHashCode() ^ this._ordinal;
+        //}
+
+        ///// <summary>
+        ///// Determines whether the specified <see cref="System.Object" />, is equal to this instance.
+        ///// </summary>
+        ///// <param name="obj">The <see cref="System.Object" /> to compare with this instance.</param>
+        ///// <returns>
+        /////   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
+        ///// </returns>
+        //public override bool Equals(object obj)
+        //{
+        //    if (obj is InlineSwitchInstruction i)
+        //        if (i.OpCode == this.OpCode)
+        //            return i.String == this.String;
+        //    return false;
+        //}
+
+
+        private int[] _deltas;
+        private int[] _targetOffsets;
 
     }
 }

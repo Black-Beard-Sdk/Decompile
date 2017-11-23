@@ -34,7 +34,7 @@ namespace Bb.Sdk.Decompiler
         /// <summary>
         /// The mask IL
         /// </summary>
-        public const string ILMask = "IL_{0:x4}: {1,-10} {2}";
+        public const string ILMask = "IL_{0:x4}: {1,-10}    {2}";
        
         /// <summary>
         /// The il mask2

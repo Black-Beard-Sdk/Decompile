@@ -6,9 +6,51 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Microsoft\**" />
+    <Compile Remove="System\CodeDom\Compiler\**" />
+    <EmbeddedResource Remove="Microsoft\**" />
+    <EmbeddedResource Remove="System\CodeDom\Compiler\**" />
+    <None Remove="Microsoft\**" />
+    <None Remove="System\CodeDom\Compiler\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Decompiler\ExceptionObjectSource.cs" />
+    <Compile Remove="Decompiler\ExpressionAstFactory.cs" />
+    <Compile Remove="Decompiler\IlParser\RawILStringVisitor.cs" />
+    <Compile Remove="Decompiler\MethodBodyInfo.cs" />
+    <Compile Remove="Decompiler\MyException.cs" />
+    <Compile Remove="Decompiler\MyFrame.cs" />
+    <Compile Remove="Decompiler\MyMethod.cs" />
     <Compile Remove="Decompiler\ReadableILVisitor.cs" />
     <Compile Remove="Decompiler\TypeResolver.cs" />
     <Compile Remove="TextWriterOutput.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Microsoft\CSharpHelpers.cs" />
+    <Compile Include="Microsoft\CSharp\CSharpCodeGenerator.cs" />
+    <Compile Include="Microsoft\CSharp\CSharpCodeProvider.cs" />
+    <Compile Include="System\CodeDom\Compiler\CodeGenerator.cs" />
+    <Compile Include="System\CodeDom\Compiler\CodeGeneratorOptions.cs" />
+    <Compile Include="System\CodeDom\Compiler\ExposedTabStringIndentedTextWriter.cs" />
+    <Compile Include="System\CodeDom\Compiler\GeneratorSupport.cs" />
+    <Compile Include="System\CodeDom\Compiler\ICodeGenerator.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
