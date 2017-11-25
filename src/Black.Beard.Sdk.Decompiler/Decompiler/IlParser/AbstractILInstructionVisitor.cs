@@ -20,6 +20,56 @@ namespace Bb.Sdk.Decompiler.IlParser
         }
 
         /// <summary>
+        /// Visits the st loc.
+        /// </summary>
+        /// <param name="inline">The inline.</param>
+        /// <exception cref="NotImplementedException"></exception>
+        public virtual void VisitStLoc(StLocInlineInstruction inline)
+        {
+        }
+
+        /// <summary>
+        /// Visits the inline st argument instruction.
+        /// </summary>
+        /// <param name="inline">The inline.</param>
+        public virtual void VisitInlineStArgInstruction(InlineStArgInstruction inline)
+        {
+        }
+
+        /// <summary>
+        /// Visits the inline ld r4 instruction.
+        /// </summary>
+        /// <param name="inline">The inline.</param>
+        public virtual void VisitInlineLdR4Instruction(InlineLdR4Instruction inline)
+        {
+        }
+
+        /// <summary>
+        /// Visits the inline ld r8 instruction.
+        /// </summary>
+        /// <param name="inline">The inline.</param>
+        public virtual void VisitInlineLdR8Instruction(InlineLdR8Instruction inline)
+        {
+        }
+
+        /// <summary>
+        /// Visits the inline ld i8 instruction.
+        /// </summary>
+        /// <param name="inline">The inline.</param>
+        public virtual void VisitInlineLdI8Instruction(InlineLdI8Instruction inline)
+        {
+            
+        }
+
+        /// <summary>
+        /// Visits the ld loc.
+        /// </summary>
+        /// <param name="ldLocInlineInstruction">The ld loc inline instruction.</param>
+        public virtual void VisitLdLoc(LdLocInlineInstruction ldLocInlineInstruction)
+        {            
+        }
+
+        /// <summary>
         /// Visits the inline br target instruction.
         /// </summary>
         /// <param name="inline">The inline br target instruction.</param>
@@ -85,15 +135,7 @@ namespace Bb.Sdk.Decompiler.IlParser
         public virtual void VisitInlineLdI4Instruction(InlineLdI4Instruction inline)
         {
 
-        }
-
-        /// <summary>
-        /// Visits the inline ld loc s instruction.
-        /// </summary>
-        /// <param name="inline">The inline.</param>
-        public virtual void VisitInlineLdLocSInstruction(InlineLdLocSInstruction inline)
-        {
-        }
+        }        
 
         /// <summary>
         /// Visits the inline field instruction.
@@ -120,35 +162,10 @@ namespace Bb.Sdk.Decompiler.IlParser
         }
 
         /// <summary>
-        /// Visits the inline st loc instruction.
-        /// </summary>
-        /// <param name="inline">The inline.</param>
-        public virtual void VisitInlineStLocInstruction(InlineStLocInstruction inline)
-        {
-            
-        }
-
-        /// <summary>
         /// Visits the inline method instruction.
         /// </summary>
         /// <param name="inline">The inline method instruction.</param>
         public virtual void VisitInlineMethodInstruction(InlineMethodInstruction inline)
-        {
-        }
-
-        /// <summary>
-        /// Inlines the ld loc instruction.
-        /// </summary>
-        /// <param name="inline">The inline.</param>
-        public virtual void VisitInlineLdLocInstruction(InlineLdLocInstruction inline)
-        {
-        }
-
-        /// <summary>
-        /// Visits the inline st loc s instruction.
-        /// </summary>
-        /// <param name="inline">The inline.</param>
-        public virtual void VisitInlineStLocSInstruction(InlineStLocSInstruction inline)
         {
         }
 

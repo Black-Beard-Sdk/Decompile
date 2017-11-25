@@ -12,11 +12,13 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// </summary>
         /// <param name="offset">The offset.</param>
         /// <param name="opCode">The op code.</param>
-        public InlineLdI4Instruction(int offset, OpCode opCode) 
+        public InlineLdI4Instruction(int offset, OpCode opCode, int value) 
             : base (offset, opCode) 
         {
-
+            this.Value = value;
         }
+
+        public int Value { get; }
 
         /// <summary>
         /// Accepts the specified visitor.

@@ -1,20 +1,24 @@
-﻿using System.Reflection.Emit;
+﻿
+using System.Diagnostics;
+using System.Reflection.Emit;
 
 namespace Bb.Sdk.Decompiler.IlParser
 {
-	public partial class InlineStLocInstruction : InlineNoneInstruction
+	public partial class InlineLdI8Instruction : InlineNoneInstruction
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="InlineStLocInstruction"/> class.
+        /// Initializes a new instance of the <see cref="InlineLdI8Instruction"/> class.
         /// </summary>
         /// <param name="offset">The offset.</param>
         /// <param name="opCode">The op code.</param>
-        public InlineStLocInstruction(int offset, OpCode opCode) 
+        public InlineLdI8Instruction(int offset, OpCode opCode, long value) 
             : base (offset, opCode) 
         {
-
+            this.Value = value;
         }
+
+        public long Value { get; }
 
         /// <summary>
         /// Accepts the specified visitor.
@@ -22,7 +26,7 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// <param name="visitor">The visitor.</param>
         public override void Accept(AbstractILInstructionVisitor visitor)
         {
-            visitor.VisitInlineStLocInstruction(this);
+            visitor.VisitInlineLdI8Instruction(this);
         }
         
     }

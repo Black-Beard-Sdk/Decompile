@@ -24,10 +24,14 @@ namespace Bb.Sdk.Decompiler.IlParser
         static ILInstructionReader()
         {
 
+            //Debug.WriteLine($"code.Name\tOpCodeType\tOperandType\tSize\tStackBehaviourPop\tStackBehaviourPush\tValue\tFlowControl\t");
+
             foreach (FieldInfo info in typeof(System.Reflection.Emit.OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static))
             {
                 OpCode code = (OpCode)info.GetValue(null);
                 ushort index = (ushort)code.Value;
+
+                //Debug.WriteLine($"{code.Name}\t{code.OpCodeType}\t{code.OperandType}\t{code.Size}\t{code.StackBehaviourPop}\t{code.StackBehaviourPush}\t{code.Value}\t{code.FlowControl}\t");
 
                 if (index < 0x100)
                     _oneByteOpCodes[index] = code;
@@ -36,14 +40,6 @@ namespace Bb.Sdk.Decompiler.IlParser
                     _twoByteOpCodes[index & 0xff] = code;
 
             }
-
-            //foreach (OpCode item in _oneByteOpCodes)
-            //    if (item.OperandType != OperandType.InlineNone)
-            //        Debug.WriteLine("{0} -> {1}", item.ToString(), item.OperandType.ToString());
-
-            //foreach (OpCode item in _twoByteOpCodes)
-            //    if (item.OperandType != OperandType.InlineNone)
-            //        Debug.WriteLine("{0} -> {1}", item.ToString(), item.OperandType.ToString());
 
         }
 
@@ -73,7 +69,6 @@ namespace Bb.Sdk.Decompiler.IlParser
             this.unionFind = new UnionFind<ILVariable>();
             this.stackMismatchPairs = new List<(ILVariable, ILVariable)>();
             this.currentStack = ImmutableStack<ILVariable>.Empty;
-
         }
 
         /// <summary>
@@ -125,11 +120,13 @@ namespace Bb.Sdk.Decompiler.IlParser
 
             var body = this.Method.GetMethodBody();
 
-            foreach (LocalVariableInfo variable in body.LocalVariables)
+            int length = body.LocalVariables.Count;
+            localVariables = new ILVariable[length];
+            for (int i = 0; i < length; i++)
             {
-
-                var v = new ILVariable(VariableKind.StackSlot, variable.LocalType, StackType.I);
-
+                LocalVariableInfo variable = body.LocalVariables[i];
+                var v = new ILVariable(VariableKind.StackSlot, variable.LocalType, StackType.I, variable.IsPinned);
+                localVariables[i] = v;
             }
 
             ILInstruction[] instructions = this.ToArray();
@@ -139,7 +136,7 @@ namespace Bb.Sdk.Decompiler.IlParser
                 ImmutableStack<ILVariable> ehStack = null;
                 if (eh.Flags == ExceptionHandlingClauseOptions.Clause)
                 {
-                    var v = new ILVariable(VariableKind.Exception, eh.CatchType)
+                    var v = new ILVariable(VariableKind.Exception, eh.CatchType, false)
                     {
                         Name = "E_" + eh.HandlerOffset,
                         HasGeneratedName = true
@@ -149,7 +146,7 @@ namespace Bb.Sdk.Decompiler.IlParser
                 }
                 else if (eh.Flags == ExceptionHandlingClauseOptions.Filter)
                 {
-                    var v = new ILVariable(VariableKind.Exception, typeof(object))
+                    var v = new ILVariable(VariableKind.Exception, typeof(object), false)
                     {
                         Name = "E_" + eh.HandlerOffset,
                         HasGeneratedName = true
@@ -440,6 +437,7 @@ namespace Bb.Sdk.Decompiler.IlParser
         private List<ILInstruction> _instructions;
         private ImmutableStack<ILVariable> currentStack;
         private int nextInstructionIndex;
+        ILVariable[] localVariables;
 
         #endregion private
 

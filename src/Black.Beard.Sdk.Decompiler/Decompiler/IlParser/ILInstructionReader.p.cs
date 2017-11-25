@@ -33,6 +33,8 @@ namespace Bb.Sdk.Decompiler.IlParser
         private ILInstruction DecodeInstruction(int position, OpCode operation)
         {
 
+            UInt16 indexUint16;
+
             switch (operation)
             {
 
@@ -99,34 +101,182 @@ namespace Bb.Sdk.Decompiler.IlParser
                     break;
 
                 case System.Reflection.Emit.OpCode c66 when c66 == System.Reflection.Emit.OpCodes.Stloc_0:
+                    return new StLocInlineInstruction(localVariables[0], position, operation, 0);
+
                 case System.Reflection.Emit.OpCode c67 when c67 == System.Reflection.Emit.OpCodes.Stloc_1:
+                    return new StLocInlineInstruction(localVariables[1], position, operation, 1);
+
                 case System.Reflection.Emit.OpCode c68 when c68 == System.Reflection.Emit.OpCodes.Stloc_2:
+                    return new StLocInlineInstruction(localVariables[2], position, operation, 2);
+
                 case System.Reflection.Emit.OpCode c69 when c69 == System.Reflection.Emit.OpCodes.Stloc_3:
-                    return new InlineStLocInstruction(position, operation);
+                    return new StLocInlineInstruction(localVariables[3], position, operation, 3);
+
+                case System.Reflection.Emit.OpCode c65 when c65 == System.Reflection.Emit.OpCodes.Stloc:
+                    indexUint16 = this.ReadUInt16();
+                    return new StLocInlineInstruction(localVariables[indexUint16], position, operation, indexUint16);
 
                 case System.Reflection.Emit.OpCode c71 when c71 == System.Reflection.Emit.OpCodes.Stloc_S:
-                    return new InlineStLocSInstruction(position, operation, this.ReadByte());
+                    indexUint16 = this.ReadByte();
+                    return new StLocInlineInstruction(localVariables[indexUint16], position, operation, indexUint16);
+
+                case System.Reflection.Emit.OpCode c29 when c29 == System.Reflection.Emit.OpCodes.Ldloc_0:
+                    return new LdLocInlineInstruction(localVariables[0], position, operation, 0);
+
+                case System.Reflection.Emit.OpCode c28 when c28 == System.Reflection.Emit.OpCodes.Ldloc_1:
+                    return new LdLocInlineInstruction(localVariables[1], position, operation, 1);
+
+                case System.Reflection.Emit.OpCode c27 when c27 == System.Reflection.Emit.OpCodes.Ldloc_2:
+                    return new LdLocInlineInstruction(localVariables[2], position, operation, 2);
 
                 case System.Reflection.Emit.OpCode c13 when c13 == System.Reflection.Emit.OpCodes.Ldloc_3:
-                case System.Reflection.Emit.OpCode c27 when c27 == System.Reflection.Emit.OpCodes.Ldloc_2:
-                case System.Reflection.Emit.OpCode c28 when c28 == System.Reflection.Emit.OpCodes.Ldloc_1:
-                case System.Reflection.Emit.OpCode c29 when c29 == System.Reflection.Emit.OpCodes.Ldloc_0:
-                    return new InlineLdLocInstruction(position, operation);
+                    return new LdLocInlineInstruction(localVariables[3], position, operation, 3);
 
                 case System.Reflection.Emit.OpCode c02 when c02 == System.Reflection.Emit.OpCodes.Ldloc_S:
-                    return new InlineLdLocSInstruction(position, operation, this.ReadByte());
+                    indexUint16 = this.ReadByte();
+                    return new LdLocInlineInstruction(localVariables[indexUint16], position, operation, indexUint16);
+
+                case System.Reflection.Emit.OpCode c54 when c54 == System.Reflection.Emit.OpCodes.Ldloc:
+                    indexUint16 = this.ReadUInt16();
+                    return new LdLocInlineInstruction(localVariables[indexUint16], position, operation, indexUint16);
+
+                case System.Reflection.Emit.OpCode c03 when c03 == System.Reflection.Emit.OpCodes.Ldloca:
+                    indexUint16 = this.ReadUInt16();
+                    return new LdLocInlineInstruction(localVariables[indexUint16], position, operation, indexUint16);
+
+                case System.Reflection.Emit.OpCode c04 when c04 == System.Reflection.Emit.OpCodes.Ldloca_S:
+                    indexUint16 = this.ReadByte();
+                    return new LdLocInlineInstruction(localVariables[indexUint16], position, operation, indexUint16);
+
+                case System.Reflection.Emit.OpCode c194 when c194 == System.Reflection.Emit.OpCodes.Ldc_I4_S:
+                    return new InlineLdI4Instruction(position, operation, ReadByte());
 
                 case System.Reflection.Emit.OpCode c184 when c184 == System.Reflection.Emit.OpCodes.Ldc_I4_0:
+                    return new InlineLdI4Instruction(position, operation, 0);
+
                 case System.Reflection.Emit.OpCode c186 when c186 == System.Reflection.Emit.OpCodes.Ldc_I4_1:
+                    return new InlineLdI4Instruction(position, operation, 1);
+
                 case System.Reflection.Emit.OpCode c198 when c198 == System.Reflection.Emit.OpCodes.Ldc_I4_2:
+                    return new InlineLdI4Instruction(position, operation, 2);
+
                 case System.Reflection.Emit.OpCode c187 when c187 == System.Reflection.Emit.OpCodes.Ldc_I4_3:
+                    return new InlineLdI4Instruction(position, operation, 3);
+
                 case System.Reflection.Emit.OpCode c188 when c188 == System.Reflection.Emit.OpCodes.Ldc_I4_4:
+                    return new InlineLdI4Instruction(position, operation, 4);
+
                 case System.Reflection.Emit.OpCode c189 when c189 == System.Reflection.Emit.OpCodes.Ldc_I4_5:
+                    return new InlineLdI4Instruction(position, operation, 5);
+
                 case System.Reflection.Emit.OpCode c190 when c190 == System.Reflection.Emit.OpCodes.Ldc_I4_6:
+                    return new InlineLdI4Instruction(position, operation, 6);
+
                 case System.Reflection.Emit.OpCode c191 when c191 == System.Reflection.Emit.OpCodes.Ldc_I4_7:
+                    return new InlineLdI4Instruction(position, operation, 7);
+
                 case System.Reflection.Emit.OpCode c192 when c192 == System.Reflection.Emit.OpCodes.Ldc_I4_8:
+                    return new InlineLdI4Instruction(position, operation, 8);
+
                 case System.Reflection.Emit.OpCode c193 when c193 == System.Reflection.Emit.OpCodes.Ldc_I4_M1:
-                    return new InlineLdI4Instruction(position, operation);
+                    return new InlineLdI4Instruction(position, operation, -1);
+
+                case System.Reflection.Emit.OpCode c183 when c183 == System.Reflection.Emit.OpCodes.Ldc_I4:
+                    return new InlineLdI4Instruction(position, operation, ReadByte());
+
+                case System.Reflection.Emit.OpCode c195 when c195 == System.Reflection.Emit.OpCodes.Ldc_I8:
+                    return new InlineLdI8Instruction(position, operation, this.ReadInt64());
+
+                case System.Reflection.Emit.OpCode c196 when c196 == System.Reflection.Emit.OpCodes.Ldc_R4:
+                    return new InlineLdR4Instruction(position, operation, this.ReadSingle());
+
+                case System.Reflection.Emit.OpCode c197 when c197 == System.Reflection.Emit.OpCodes.Ldc_R8:
+                    return new InlineLdR8Instruction(position, operation, this.ReadDouble());
+
+                case System.Reflection.Emit.OpCode c176 when c176 == System.Reflection.Emit.OpCodes.Ldarg_0:
+                    return new InlineLdArgInstruction(position, operation, 0);
+
+                case System.Reflection.Emit.OpCode c177 when c177 == System.Reflection.Emit.OpCodes.Ldarg_1:
+                    return new InlineLdArgInstruction(position, operation, 1);
+
+                case System.Reflection.Emit.OpCode c178 when c178 == System.Reflection.Emit.OpCodes.Ldarg_2:
+                    return new InlineLdArgInstruction(position, operation, 2);
+
+                case System.Reflection.Emit.OpCode c179 when c179 == System.Reflection.Emit.OpCodes.Ldarg_3:
+                    return new InlineLdArgInstruction(position, operation, 3);
+
+                case System.Reflection.Emit.OpCode c181 when c181 == System.Reflection.Emit.OpCodes.Ldarga:
+                case System.Reflection.Emit.OpCode c175 when c175 == System.Reflection.Emit.OpCodes.Ldarg:
+                case System.Reflection.Emit.OpCode c182 when c182 == System.Reflection.Emit.OpCodes.Ldarga_S:
+                case System.Reflection.Emit.OpCode c180 when c180 == System.Reflection.Emit.OpCodes.Ldarg_S:
+                    return new InlineLdArgInstruction(position, operation, this.ReadUInt16());
+
+                case System.Reflection.Emit.OpCode c103 when c103 == System.Reflection.Emit.OpCodes.Starg:
+                    return new InlineStArgInstruction(position, operation, this.ReadUInt16());
+
+                case System.Reflection.Emit.OpCode c104 when c104 == System.Reflection.Emit.OpCodes.Starg_S:
+                    return new InlineStArgInstruction(position, operation, this.ReadUInt16());
+
+                case System.Reflection.Emit.OpCode c115 when c115 == System.Reflection.Emit.OpCodes.Ldelem_I1:
+                    return new InlineLdElemInstruction(position, operation, typeof(sbyte));
+
+                case System.Reflection.Emit.OpCode c56 when c56 == System.Reflection.Emit.OpCodes.Ldelem_I2:
+                    return new InlineLdElemInstruction(position, operation, typeof(Int16));
+
+                case System.Reflection.Emit.OpCode c30 when c30 == System.Reflection.Emit.OpCodes.Ldelem_I4:
+                    return new InlineLdElemInstruction(position, operation, typeof(Int32));
+
+                case System.Reflection.Emit.OpCode c31 when c31 == System.Reflection.Emit.OpCodes.Ldelem_I8:
+                    return new InlineLdElemInstruction(position, operation, typeof(Int64));
+
+                case System.Reflection.Emit.OpCode c32 when c32 == System.Reflection.Emit.OpCodes.Ldelem_R4:
+                    return new InlineLdElemInstruction(position, operation, typeof(Single));
+
+                case System.Reflection.Emit.OpCode c33 when c33 == System.Reflection.Emit.OpCodes.Ldelem_R8:
+                    return new InlineLdElemInstruction(position, operation, typeof(Double));
+
+                case System.Reflection.Emit.OpCode c34 when c34 == System.Reflection.Emit.OpCodes.Ldelem_Ref:
+                    return new InlineLdElemInstruction(position, operation, typeof(Object));
+
+                case System.Reflection.Emit.OpCode c35 when c35 == System.Reflection.Emit.OpCodes.Ldelem_U1:
+                    return new InlineLdElemInstruction(position, operation, typeof(Byte));
+
+                case System.Reflection.Emit.OpCode c36 when c36 == System.Reflection.Emit.OpCodes.Ldelem_U2:
+                    return new InlineLdElemInstruction(position, operation, typeof(UInt16));
+
+                case System.Reflection.Emit.OpCode c37 when c37 == System.Reflection.Emit.OpCodes.Ldelem_U4:
+                    return new InlineLdElemInstruction(position, operation, typeof(UInt32));
+
+                case System.Reflection.Emit.OpCode c171 when c171 == System.Reflection.Emit.OpCodes.Ldelem_I:
+                    return new InlineLdElemInstruction(position, operation, typeof(IntPtr));
+
+                case System.Reflection.Emit.OpCode c116 when c116 == System.Reflection.Emit.OpCodes.Ldelem:
+                case System.Reflection.Emit.OpCode c38 when c38 == System.Reflection.Emit.OpCodes.Ldelema:
+                    return new InlineLdElemInstruction(position, operation, _resolver.AsType(this.ReadInt32()));
+
+                case System.Reflection.Emit.OpCode c86 when c86 == System.Reflection.Emit.OpCodes.Stelem_Ref:
+                    return new InlineStElemInstruction(position, operation, typeof(object));
+
+                case System.Reflection.Emit.OpCode c105 when c105 == System.Reflection.Emit.OpCodes.Stelem:
+                    return new InlineStElemInstruction(position, operation, _resolver.AsType(this.ReadInt32()));
+
+                case System.Reflection.Emit.OpCode c107 when c107 == System.Reflection.Emit.OpCodes.Stelem_I1:
+                    return new InlineStElemInstruction(position, operation, typeof(sbyte));
+
+                case System.Reflection.Emit.OpCode c108 when c108 == System.Reflection.Emit.OpCodes.Stelem_I2:
+                    return new InlineStElemInstruction(position, operation, typeof(Int16));
+
+                case System.Reflection.Emit.OpCode c109 when c109 == System.Reflection.Emit.OpCodes.Stelem_I4:
+                    return new InlineStElemInstruction(position, operation, typeof(Int32));
+
+                case System.Reflection.Emit.OpCode c110 when c110 == System.Reflection.Emit.OpCodes.Stelem_I8:
+                    return new InlineStElemInstruction(position, operation, typeof(Int64));
+
+                case System.Reflection.Emit.OpCode c111 when c111 == System.Reflection.Emit.OpCodes.Stelem_R4:
+                    return new InlineStElemInstruction(position, operation, typeof(Single));
+
+                case System.Reflection.Emit.OpCode c112 when c112 == System.Reflection.Emit.OpCodes.Stelem_R8:
+                    return new InlineStElemInstruction(position, operation, typeof(Double));
 
                 case System.Reflection.Emit.OpCode c01 when c01 == System.Reflection.Emit.OpCodes.Add:
                 case System.Reflection.Emit.OpCode c73 when c73 == System.Reflection.Emit.OpCodes.Sub:
@@ -161,6 +311,7 @@ namespace Bb.Sdk.Decompiler.IlParser
                 case System.Reflection.Emit.OpCode c132 when c132 == System.Reflection.Emit.OpCodes.Conv_I1:
                 case System.Reflection.Emit.OpCode c214 when c214 == System.Reflection.Emit.OpCodes.Conv_R4:
                 case System.Reflection.Emit.OpCode c215 when c215 == System.Reflection.Emit.OpCodes.Conv_R8:
+
                 case System.Reflection.Emit.OpCode c219 when c219 == System.Reflection.Emit.OpCodes.Conv_U4:
                 case System.Reflection.Emit.OpCode c131 when c131 == System.Reflection.Emit.OpCodes.Conv_I:
                 case System.Reflection.Emit.OpCode c213 when c213 == System.Reflection.Emit.OpCodes.Conv_R_Un:
@@ -205,68 +356,27 @@ namespace Bb.Sdk.Decompiler.IlParser
                 case System.Reflection.Emit.OpCode c70 when c70 == System.Reflection.Emit.OpCodes.Stind_I1:
                     return new InlineConvertionInstruction(position, operation);
 
-                case System.Reflection.Emit.OpCode c176 when c176 == System.Reflection.Emit.OpCodes.Ldarg_0:
-                case System.Reflection.Emit.OpCode c177 when c177 == System.Reflection.Emit.OpCodes.Ldarg_1:
-                case System.Reflection.Emit.OpCode c178 when c178 == System.Reflection.Emit.OpCodes.Ldarg_2:
-                case System.Reflection.Emit.OpCode c179 when c179 == System.Reflection.Emit.OpCodes.Ldarg_3:
-                    return new InlineLdArgInstruction(position, operation);
+                //case System.Reflection.Emit.OpCode c39 when c39 == System.Reflection.Emit.OpCodes.Ldfld:
 
-                case System.Reflection.Emit.OpCode c115 when c115 == System.Reflection.Emit.OpCodes.Ldelem_I1:
-                case System.Reflection.Emit.OpCode c56 when c56 == System.Reflection.Emit.OpCodes.Ldelem_I2:
-                case System.Reflection.Emit.OpCode c30 when c30 == System.Reflection.Emit.OpCodes.Ldelem_I4:
-                case System.Reflection.Emit.OpCode c31 when c31 == System.Reflection.Emit.OpCodes.Ldelem_I8:
-                case System.Reflection.Emit.OpCode c32 when c32 == System.Reflection.Emit.OpCodes.Ldelem_R4:
-                case System.Reflection.Emit.OpCode c33 when c33 == System.Reflection.Emit.OpCodes.Ldelem_R8:
-                case System.Reflection.Emit.OpCode c34 when c34 == System.Reflection.Emit.OpCodes.Ldelem_Ref:
-                case System.Reflection.Emit.OpCode c35 when c35 == System.Reflection.Emit.OpCodes.Ldelem_U1:
-                case System.Reflection.Emit.OpCode c36 when c36 == System.Reflection.Emit.OpCodes.Ldelem_U2:
-                case System.Reflection.Emit.OpCode c37 when c37 == System.Reflection.Emit.OpCodes.Ldelem_U4:
-                    return new InlineLdElemInstruction(position, operation);
-
-                case System.Reflection.Emit.OpCode c86 when c86 == System.Reflection.Emit.OpCodes.Stelem_Ref:
-                case System.Reflection.Emit.OpCode c105 when c105 == System.Reflection.Emit.OpCodes.Stelem:
-                case System.Reflection.Emit.OpCode c107 when c107 == System.Reflection.Emit.OpCodes.Stelem_I1:
-                case System.Reflection.Emit.OpCode c108 when c108 == System.Reflection.Emit.OpCodes.Stelem_I2:
-                case System.Reflection.Emit.OpCode c109 when c109 == System.Reflection.Emit.OpCodes.Stelem_I4:
-                case System.Reflection.Emit.OpCode c110 when c110 == System.Reflection.Emit.OpCodes.Stelem_I8:
-                case System.Reflection.Emit.OpCode c111 when c111 == System.Reflection.Emit.OpCodes.Stelem_R4:
-                case System.Reflection.Emit.OpCode c112 when c112 == System.Reflection.Emit.OpCodes.Stelem_R8:
-                    return new InlineStElemInstruction(position, operation);
-
-                    //case System.Reflection.Emit.OpCode c180 when c180 == System.Reflection.Emit.OpCodes.Ldarg_S:
-                    //case System.Reflection.Emit.OpCode c181 when c181 == System.Reflection.Emit.OpCodes.Ldarga:
-                    //case System.Reflection.Emit.OpCode c175 when c175 == System.Reflection.Emit.OpCodes.Ldarg:
-                    //case System.Reflection.Emit.OpCode c194 when c194 == System.Reflection.Emit.OpCodes.Ldc_I4_S:
-                    //case System.Reflection.Emit.OpCode c182 when c182 == System.Reflection.Emit.OpCodes.Ldarga_S:
-                    //case System.Reflection.Emit.OpCode c03 when c03 == System.Reflection.Emit.OpCodes.Ldloca:
-                    //case System.Reflection.Emit.OpCode c04 when c04 == System.Reflection.Emit.OpCodes.Ldloca_S:
                     //case System.Reflection.Emit.OpCode c06 when c06 == System.Reflection.Emit.OpCodes.Ldobj:
                     //case System.Reflection.Emit.OpCode c07 when c07 == System.Reflection.Emit.OpCodes.Ldsfld:
                     //case System.Reflection.Emit.OpCode c08 when c08 == System.Reflection.Emit.OpCodes.Ldsflda:                    
                     //case System.Reflection.Emit.OpCode c10 when c10 == System.Reflection.Emit.OpCodes.Ldtoken:
-                    //case System.Reflection.Emit.OpCode c11 when c11 == System.Reflection.Emit.OpCodes.Ldvirtftn:                    
-                    //case System.Reflection.Emit.OpCode c38 when c38 == System.Reflection.Emit.OpCodes.Ldelema:
-                    //case System.Reflection.Emit.OpCode c39 when c39 == System.Reflection.Emit.OpCodes.Ldfld:
+                    //case System.Reflection.Emit.OpCode c11 when c11 == System.Reflection.Emit.OpCodes.Ldvirtftn:                                        
+
                     //case System.Reflection.Emit.OpCode c40 when c40 == System.Reflection.Emit.OpCodes.Ldflda:
                     //case System.Reflection.Emit.OpCode c41 when c41 == System.Reflection.Emit.OpCodes.Ldftn:                    
                     //case System.Reflection.Emit.OpCode c53 when c53 == System.Reflection.Emit.OpCodes.Ldlen:
-                    //case System.Reflection.Emit.OpCode c54 when c54 == System.Reflection.Emit.OpCodes.Ldloc:
+
+
 
                     //case System.Reflection.Emit.OpCode c80 when c80 == System.Reflection.Emit.OpCodes.Unbox:
                     //case System.Reflection.Emit.OpCode c81 when c81 == System.Reflection.Emit.OpCodes.Unbox_Any:
                     //case System.Reflection.Emit.OpCode c169 when c169 == System.Reflection.Emit.OpCodes.Box:
-
                     //case System.Reflection.Emit.OpCode c106 when c106 == System.Reflection.Emit.OpCodes.Stelem_I:
-
-                    //case System.Reflection.Emit.OpCode c65 when c65 == System.Reflection.Emit.OpCodes.Stloc:
-
-
                     //case System.Reflection.Emit.OpCode c12 when c12 == System.Reflection.Emit.OpCodes.Leave:
                     //case System.Reflection.Emit.OpCode c14 when c14 == System.Reflection.Emit.OpCodes.Leave_S:
-
                     //case System.Reflection.Emit.OpCode c15 when c15 == System.Reflection.Emit.OpCodes.Mkrefany:
-
-
                     //case System.Reflection.Emit.OpCode c26 when c26 == System.Reflection.Emit.OpCodes.Localloc:
                     //case System.Reflection.Emit.OpCode c55 when c55 == System.Reflection.Emit.OpCodes.Prefix1:                    
                     //case System.Reflection.Emit.OpCode c57 when c57 == System.Reflection.Emit.OpCodes.Prefix2:
@@ -281,84 +391,54 @@ namespace Bb.Sdk.Decompiler.IlParser
                     //case System.Reflection.Emit.OpCode c88 when c88 == System.Reflection.Emit.OpCodes.Prefix6:
                     //case System.Reflection.Emit.OpCode c89 when c89 == System.Reflection.Emit.OpCodes.Prefix7:
                     //case System.Reflection.Emit.OpCode c90 when c90 == System.Reflection.Emit.OpCodes.Prefixref:
-
                     //case System.Reflection.Emit.OpCode c92 when c92 == System.Reflection.Emit.OpCodes.Refanytype:
                     //case System.Reflection.Emit.OpCode c93 when c93 == System.Reflection.Emit.OpCodes.Refanyval:                   
                     //case System.Reflection.Emit.OpCode c98 when c98 == System.Reflection.Emit.OpCodes.Shl:
                     //case System.Reflection.Emit.OpCode c99 when c99 == System.Reflection.Emit.OpCodes.Shr:
                     //case System.Reflection.Emit.OpCode c101 when c101 == System.Reflection.Emit.OpCodes.Shr_Un:
-                    //case System.Reflection.Emit.OpCode c102 when c102 == System.Reflection.Emit.OpCodes.Sizeof:
-                    //case System.Reflection.Emit.OpCode c103 when c103 == System.Reflection.Emit.OpCodes.Starg:
-                    //case System.Reflection.Emit.OpCode c104 when c104 == System.Reflection.Emit.OpCodes.Starg_S:
-
+                    //case System.Reflection.Emit.OpCode c102 when c102 == System.Reflection.Emit.OpCodes.Sizeof:                    
                     //case System.Reflection.Emit.OpCode c113 when c113 == System.Reflection.Emit.OpCodes.Prefix3:                    
-                    //case System.Reflection.Emit.OpCode c116 when c116 == System.Reflection.Emit.OpCodes.Ldelem:
-
                     //case System.Reflection.Emit.OpCode c20 when c20 == System.Reflection.Emit.OpCodes.Newarr:
-
                     //case System.Reflection.Emit.OpCode c21 when c21 == System.Reflection.Emit.OpCodes.Newobj:
                     //case System.Reflection.Emit.OpCode c120 when c120 == System.Reflection.Emit.OpCodes.Call:
                     //case System.Reflection.Emit.OpCode c121 when c121 == System.Reflection.Emit.OpCodes.Calli:
                     //case System.Reflection.Emit.OpCode c122 when c122 == System.Reflection.Emit.OpCodes.Callvirt:
-
                     //case System.Reflection.Emit.OpCode c123 when c123 == System.Reflection.Emit.OpCodes.Castclass:
                     //case System.Reflection.Emit.OpCode c127 when c127 == System.Reflection.Emit.OpCodes.Ckfinite:
-
                     //case System.Reflection.Emit.OpCode c130 when c130 == System.Reflection.Emit.OpCodes.Constrained:                    
                     //case System.Reflection.Emit.OpCode c148 when c148 == System.Reflection.Emit.OpCodes.Arglist:
-
                     //case System.Reflection.Emit.OpCode c128 when c128 == System.Reflection.Emit.OpCodes.Brfalse:
                     //case System.Reflection.Emit.OpCode c117 when c117 == System.Reflection.Emit.OpCodes.Brfalse_S:
                     //case System.Reflection.Emit.OpCode c118 when c118 == System.Reflection.Emit.OpCodes.Brtrue:
                     //case System.Reflection.Emit.OpCode c119 when c119 == System.Reflection.Emit.OpCodes.Brtrue_S:
                     //case System.Reflection.Emit.OpCode c143 when c143 == System.Reflection.Emit.OpCodes.Br_S:
                     //case System.Reflection.Emit.OpCode c144 when c144 == System.Reflection.Emit.OpCodes.Br:
-
                     //case System.Reflection.Emit.OpCode c149 when c149 == System.Reflection.Emit.OpCodes.Beq:
                     //case System.Reflection.Emit.OpCode c150 when c150 == System.Reflection.Emit.OpCodes.Beq_S:
-
                     //case System.Reflection.Emit.OpCode c151 when c151 == System.Reflection.Emit.OpCodes.Bge:
                     //case System.Reflection.Emit.OpCode c152 when c152 == System.Reflection.Emit.OpCodes.Bge_S:
                     //case System.Reflection.Emit.OpCode c153 when c153 == System.Reflection.Emit.OpCodes.Bge_Un:
                     //case System.Reflection.Emit.OpCode c154 when c154 == System.Reflection.Emit.OpCodes.Bge_Un_S:
-
                     //case System.Reflection.Emit.OpCode c155 when c155 == System.Reflection.Emit.OpCodes.Bgt:
                     //case System.Reflection.Emit.OpCode c156 when c156 == System.Reflection.Emit.OpCodes.Bgt_S:
                     //case System.Reflection.Emit.OpCode c157 when c157 == System.Reflection.Emit.OpCodes.Bgt_Un:
                     //case System.Reflection.Emit.OpCode c158 when c158 == System.Reflection.Emit.OpCodes.Bgt_Un_S:
-
                     //case System.Reflection.Emit.OpCode c159 when c159 == System.Reflection.Emit.OpCodes.Ble:
                     //case System.Reflection.Emit.OpCode c160 when c160 == System.Reflection.Emit.OpCodes.Ble_S:
                     //case System.Reflection.Emit.OpCode c161 when c161 == System.Reflection.Emit.OpCodes.Ble_Un:
                     //case System.Reflection.Emit.OpCode c162 when c162 == System.Reflection.Emit.OpCodes.Ble_Un_S:
-
                     //case System.Reflection.Emit.OpCode c163 when c163 == System.Reflection.Emit.OpCodes.Blt:
                     //case System.Reflection.Emit.OpCode c164 when c164 == System.Reflection.Emit.OpCodes.Blt_S:
                     //case System.Reflection.Emit.OpCode c165 when c165 == System.Reflection.Emit.OpCodes.Blt_Un:
                     //case System.Reflection.Emit.OpCode c166 when c166 == System.Reflection.Emit.OpCodes.Blt_Un_S:
                     //case System.Reflection.Emit.OpCode c167 when c167 == System.Reflection.Emit.OpCodes.Bne_Un:
-
                     //case System.Reflection.Emit.OpCode c168 when c168 == System.Reflection.Emit.OpCodes.Bne_Un_S:
-
-                    //case System.Reflection.Emit.OpCode c171 when c171 == System.Reflection.Emit.OpCodes.Ldelem_I:                    
-
                     //case System.Reflection.Emit.OpCode c174 when c174 == System.Reflection.Emit.OpCodes.Jmp:                    
                     //case System.Reflection.Emit.OpCode c185 when c185 == System.Reflection.Emit.OpCodes.Isinst:
-
-                    //case System.Reflection.Emit.OpCode c183 when c183 == System.Reflection.Emit.OpCodes.Ldc_I4:
-                    //case System.Reflection.Emit.OpCode c195 when c195 == System.Reflection.Emit.OpCodes.Ldc_I8:
-                    //case System.Reflection.Emit.OpCode c196 when c196 == System.Reflection.Emit.OpCodes.Ldc_R4:
-                    //case System.Reflection.Emit.OpCode c197 when c197 == System.Reflection.Emit.OpCodes.Ldc_R8:
-                    
-
                     //case System.Reflection.Emit.OpCode c199 when c199 == System.Reflection.Emit.OpCodes.Initobj:
                     //case System.Reflection.Emit.OpCode c200 when c200 == System.Reflection.Emit.OpCodes.Initblk:
-
                     //case System.Reflection.Emit.OpCode c221 when c221 == System.Reflection.Emit.OpCodes.Cpblk:
                     //case System.Reflection.Emit.OpCode c222 when c222 == System.Reflection.Emit.OpCodes.Cpobj:                                        
-
-
-
 
             }
 

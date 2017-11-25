@@ -26,6 +26,9 @@ namespace Bb.Sdk.Decompiler.IlParser
         public readonly StackType StackType;
 
         Type type;
+
+        public bool IsPinned { get; }
+
         public Type Type
         {
             get
@@ -207,23 +210,26 @@ namespace Bb.Sdk.Decompiler.IlParser
         ///// </summary>
         //public IField StateMachineField;
 
-        public ILVariable(VariableKind kind, Type type)
+        public ILVariable(VariableKind kind, Type type, bool isPinned)
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
             this.Kind = kind;
             this.type = type;
+            this.IsPinned = isPinned;
             this.StackType = type.GetStackType();
             if (kind == VariableKind.Parameter)
                 this.HasInitialValue = true;
         }
 
-        public ILVariable(VariableKind kind, Type type, StackType stackType)
+        public ILVariable(VariableKind kind, Type type, StackType stackType, bool isPinned)
         {
             if (type == null)
                 throw new ArgumentNullException(nameof(type));
             this.Kind = kind;
             this.type = type;
+            this.IsPinned = isPinned;
+            this.HasInitialValue = hasInitialValue;
             this.StackType = stackType;
             if (kind == VariableKind.Parameter)
                 this.HasInitialValue = true;

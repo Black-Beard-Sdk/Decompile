@@ -308,131 +308,72 @@ namespace Bb.Sdk.Decompiler.IlParser
 
         }
 
-        public override void VisitInlineStLocInstruction(InlineStLocInstruction inline)
+        public override void VisitStLoc(StLocInlineInstruction inline)
         {
 
             TestMarker(inline);
-            ILInstruction il;
-            CodeExpression i;
 
-            switch (inline.OpCode)
-            {
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Stloc_0:
-                    il = Pop();
-                    i = il.Expression as CodeExpression;
-                    if (i != null)
-                        inline.Expression = new CodeAssignStatement(inline, new CodeVariableReferenceExpression(inline, "var0"), i);
-                    else
-                    {
-                        if (il.Expression is CodeStatement s)
-                        {
-                            if (s is CodeAssignStatement a)
-                                inline.Expression = new CodeAssignStatement(inline, new CodeVariableReferenceExpression(inline, "var0"), a.Left);
-
-                            else
-                                Stop();
-                        }
-                        else
-                            Stop();
-                    }
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Stloc_1:
-                    il = Pop();
-                    i = il.Expression as CodeExpression;
-                    Debug.Assert(i != null);
-                    inline.Expression = new CodeAssignStatement(inline, new CodeVariableReferenceExpression(inline, "var1"), i);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Stloc_2:
-                    il = Pop();
-                    i = il.Expression as CodeExpression;
-                    Debug.Assert(i != null);
-                    inline.Expression = new CodeAssignStatement(inline, new CodeVariableReferenceExpression(inline, "var2"), i);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Stloc_3:
-                    il = Pop();
-                    i = il.Expression as CodeExpression;
-                    Debug.Assert(i != null);
-                    inline.Expression = new CodeAssignStatement(inline, new CodeVariableReferenceExpression(inline, "var3"), i);
-                    break;
-
-                default:
-                    Stop();
-                    break;
-
-            }
+            var il = Pop();
+            var i = il.Expression as CodeExpression;
+            if (i != null)
+                inline.Expression = new CodeAssignStatement(inline, new CodeVariableReferenceExpression(inline, "var" + inline.Index), i);
+            else
+                Stop();
 
             Stack(inline);
 
         }
 
-        public override void VisitInlineLdElemInstruction(InlineLdElemInstruction inline)
+        public override void VisitInlineStArgInstruction(InlineStArgInstruction inline)
+        {
+            TestMarker(inline);
+
+            var il = Pop();
+            var i = il.Expression as CodeExpression;
+            if (i != null)
+                inline.Expression = new CodeAssignStatement(inline, new CodeVariableReferenceExpression(inline, "arg" + inline.Index), i);
+            else
+                Stop();
+
+            Stack(inline);
+        }
+
+        public override void VisitLdLoc(LdLocInlineInstruction inline)
+        {
+            TestMarker(inline);
+            inline.Expression = new CodeVariableReferenceExpression(inline, "var" + inline.Index);
+            Stack(inline);
+        }
+
+        public override void VisitInlineLdArgInstruction(InlineLdArgInstruction inline)
+        {
+            TestMarker(inline);
+            inline.Expression = new CodeVariableReferenceExpression(inline, "arg" + inline.Index);
+            Stack(inline);
+        }
+
+        public override void VisitInlineLdElemInstruction(InlineLdElemInstruction inline) // var[0]
         {
 
             TestMarker(inline);
-            ILInstruction il;
-            CodeExpression i;
-            switch (inline.OpCode)
-            {
-                default:
-                    Stop();
-                    break;
-            }
+            ILInstruction ilRef = Pop();
+            ILInstruction il = Pop();
+
+            inline.Expression = new CodeArrayIndexerExpression(inline, ilRef.Expression as CodeExpression, il.Expression as CodeExpression);
+
             Stack(inline);
 
         }
 
         public override void VisitInlineStElemInstruction(InlineStElemInstruction inline)
         {
-
             TestMarker(inline);
-            ILInstruction il;
-            CodeExpression i;
-            switch (inline.OpCode)
-            {
-                default:
-                    Stop();
-                    break;
-            }
-            Stack(inline);
+            ILInstruction ilRef = Pop();
+            ILInstruction il = Pop();
 
-        }
+            inline.Expression = new CodeArrayIndexerExpression(inline, ilRef.Expression as CodeExpression, il.Expression as CodeExpression);
 
-        /// <summary>
-        /// Inlines the ld loc instruction.
-        /// </summary>
-        /// <param name="inline">The inline.</param>
-        public override void VisitInlineLdLocInstruction(InlineLdLocInstruction inline)
-        {
-
-            TestMarker(inline);
-
-            switch (inline.OpCode)
-            {
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldloc_0:
-                    inline.Expression = new CodeVariableReferenceExpression(inline, "var0");
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldloc_1:
-                    inline.Expression = new CodeVariableReferenceExpression(inline, "var1");
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldloc_2:
-                    inline.Expression = new CodeVariableReferenceExpression(inline, "var2");
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldloc_3:
-                    inline.Expression = new CodeVariableReferenceExpression(inline, "var3");
-                    break;
-
-                default:
-                    Stop();
-                    break;
-
-            }
+            inline.Expression = new CodeAssignStatement(inline, inline.Expression as CodeExpression, Pop().Expression as CodeExpression);
 
             Stack(inline);
 
@@ -444,57 +385,42 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// <param name="inline">The inline.</param>
         public override void VisitInlineLdI4Instruction(InlineLdI4Instruction inline)
         {
-
             TestMarker(inline);
-
-            switch (inline.OpCode)
-            {
-
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_0:
-                    inline.Expression = new CodePrimitiveExpression(inline, 0);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_1:
-                    inline.Expression = new CodePrimitiveExpression(inline, 1);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_2:
-                    inline.Expression = new CodePrimitiveExpression(inline, 2);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_3:
-                    inline.Expression = new CodePrimitiveExpression(inline, 3);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_4:
-                    inline.Expression = new CodePrimitiveExpression(inline, 4);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_5:
-                    inline.Expression = new CodePrimitiveExpression(inline, 5);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_6:
-                    inline.Expression = new CodePrimitiveExpression(inline, 6);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_7:
-                    inline.Expression = new CodePrimitiveExpression(inline, 7);
-                    break;
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldc_I4_8:
-                    inline.Expression = new CodePrimitiveExpression(inline, 8);
-                    break;
-
-                default:
-                    Stop();
-                    break;
-
-            }
-
+            inline.Expression = new CodePrimitiveExpression(inline, inline.Value);
             Stack(inline);
+        }
 
+        /// <summary>
+        /// Visits the inline ld i8 instruction.
+        /// </summary>
+        /// <param name="inline">The inline.</param>
+        public override void VisitInlineLdI8Instruction(InlineLdI8Instruction inline)
+        {
+            TestMarker(inline);
+            inline.Expression = new CodePrimitiveExpression(inline, inline.Value);
+            Stack(inline);
+        }
+
+        /// <summary>
+        /// Visits the inline ld r4 instruction.
+        /// </summary>
+        /// <param name="inline">The inline.</param>
+        public override void VisitInlineLdR4Instruction(InlineLdR4Instruction inline)
+        {
+            TestMarker(inline);
+            inline.Expression = new CodePrimitiveExpression(inline, inline.Value);
+            Stack(inline);
+        }
+
+        /// <summary>
+        /// Visits the inline ld r8 instruction.
+        /// </summary>
+        /// <param name="inline">The inline.</param>
+        public override void VisitInlineLdR8Instruction(InlineLdR8Instruction inline)
+        {
+            TestMarker(inline);
+            inline.Expression = new CodePrimitiveExpression(inline, inline.Value);
+            Stack(inline);
         }
 
         /// <summary>
@@ -587,26 +513,6 @@ namespace Bb.Sdk.Decompiler.IlParser
             }
 
             Stack(inline);
-        }
-
-        public override void VisitInlineLdArgInstruction(InlineLdArgInstruction inline)
-        {
-
-            TestMarker(inline);
-
-            ILInstruction il;
-            ILInstruction il2;
-            CodeExpression i;
-
-            switch (inline.OpCode)
-            {
-                default:
-                    Stop();
-                    break;
-            }
-            Stack(inline);
-
-
         }
 
         public override void VisitInlineConditionInstruction(InlineConditionInstruction inline)
@@ -1022,50 +928,6 @@ namespace Bb.Sdk.Decompiler.IlParser
 
             Stack(inline);
         }
-
-        public override void VisitInlineLdLocSInstruction(InlineLdLocSInstruction inline)
-        {
-            TestMarker(inline);
-
-            switch (inline.OpCode)
-            {
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Ldloc_S:
-                    inline.Expression = new CodeVariableReferenceExpression(inline, $"var{inline.Ordinal}");
-                    break;
-
-                default:
-                    Stop();
-                    break;
-            }
-
-            Stack(inline);
-        }
-
-        public override void VisitInlineStLocSInstruction(InlineStLocSInstruction inline)
-        {
-            TestMarker(inline);
-            ILInstruction il;
-
-            switch (inline.OpCode)
-            {
-
-                case OpCode c when c == System.Reflection.Emit.OpCodes.Stloc_S:
-                    var right = Pop().Expression as CodeExpression;
-                    inline.Expression = new CodeVariableReferenceExpression(inline, $"var{inline.Ordinal}");
-                    inline.Expression = new CodeAssignStatement(inline, inline.Expression as CodeExpression, right);
-                    break;
-
-                default:
-                    Stop();
-                    break;
-
-            }
-
-            Stack(inline);
-        }
-
-
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private CodeExpression[] getArguments(InlineMethodInstruction inline)

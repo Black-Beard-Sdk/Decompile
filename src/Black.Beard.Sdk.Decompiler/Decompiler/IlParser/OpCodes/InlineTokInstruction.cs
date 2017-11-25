@@ -13,8 +13,8 @@ namespace Bb.Sdk.Decompiler.IlParser
 
         internal InlineTokInstruction(int offset, OpCode opCode, int token, ITokenResolver resolver) : base(offset, opCode)
         {
-            this._resolver = resolver;
-            this._token = token;
+            this._resolver = resolver ?? throw new System.ArgumentNullException(nameof(resolver));
+            this._token = token;           
         }
 
         /// <summary>

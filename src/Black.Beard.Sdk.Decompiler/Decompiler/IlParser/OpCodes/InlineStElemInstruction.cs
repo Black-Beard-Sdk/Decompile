@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Diagnostics;
 using System.Reflection.Emit;
 
@@ -12,11 +13,13 @@ namespace Bb.Sdk.Decompiler.IlParser
         /// </summary>
         /// <param name="offset">The offset.</param>
         /// <param name="opCode">The op code.</param>
-        public InlineStElemInstruction(int offset, OpCode opCode) 
+        public InlineStElemInstruction(int offset, OpCode opCode, Type type) 
             : base (offset, opCode) 
         {
-
+            this.Type = type;
         }
+
+        public Type Type { get; }
 
         /// <summary>
         /// Accepts the specified visitor.

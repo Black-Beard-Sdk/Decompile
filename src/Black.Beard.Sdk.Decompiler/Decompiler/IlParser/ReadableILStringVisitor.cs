@@ -39,6 +39,21 @@ namespace Bb.Sdk.Decompiler.IlParser
             this.collector.Process(inline, string.Empty);
         }
 
+        public override void VisitInlineLdI8Instruction(InlineLdI8Instruction inline)
+        {
+            this.collector.Process(inline, inline.Value.ToString());
+        }
+
+        public override void VisitInlineLdR4Instruction(InlineLdR4Instruction inline)
+        {
+            this.collector.Process(inline, inline.Value.ToString());
+        }
+
+        public override void VisitInlineLdR8Instruction(InlineLdR8Instruction inline)
+        {
+            this.collector.Process(inline, inline.Value.ToString());
+        }
+
         public override void VisitInlineLdArgInstruction(InlineLdArgInstruction inline)
         {
             this.collector.Process(inline, string.Empty);
@@ -51,17 +66,7 @@ namespace Bb.Sdk.Decompiler.IlParser
 
         public override void VisitInlineLdI4Instruction(InlineLdI4Instruction inline)
         {
-            this.collector.Process(inline, string.Empty);
-        }
-
-        public override void VisitInlineLdLocInstruction(InlineLdLocInstruction inline)
-        {
-            this.collector.Process(inline, string.Empty);
-        }
-
-        public override void VisitInlineLdLocSInstruction(InlineLdLocSInstruction inline)
-        {
-            this.collector.Process(inline, this.formatProvider.Argument(inline.Ordinal));
+            this.collector.Process(inline, inline.Value.ToString());
         }
 
         public override void VisitInlineOperatorInstruction(InlineOperatorInstruction inline)
@@ -74,14 +79,19 @@ namespace Bb.Sdk.Decompiler.IlParser
             this.collector.Process(inline, string.Empty);
         }
 
-        public override void VisitInlineStLocInstruction(InlineStLocInstruction inline)
+        public override void VisitLdLoc(LdLocInlineInstruction inline)
         {
-            this.collector.Process(inline, string.Empty);
+            this.collector.Process(inline, inline.Index.ToString());
         }
 
-        public override void VisitInlineStLocSInstruction(InlineStLocSInstruction inline)
+        public override void VisitInlineStArgInstruction(InlineStArgInstruction inline)
         {
-            this.collector.Process(inline, this.formatProvider.Argument(inline.Ordinal));
+            this.collector.Process(inline, inline.Index.ToString());
+        }
+
+        public override void VisitStLoc(StLocInlineInstruction inline)
+        {
+            this.collector.Process(inline, inline.Index.ToString());
         }
 
         /// <summary>
